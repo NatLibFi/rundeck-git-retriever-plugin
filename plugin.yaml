@@ -1,0 +1,38 @@
+# yaml plugin metadata
+
+name: Git repository retriever
+version: 1.0.0
+rundeckPluginVersion: 1.1
+author: The National Library of Finland
+date: 2016-08-14
+providers:
+  - name: Git repository retriever
+    description: Retrieve a Git repository via SSH
+    service: WorkflowStep
+    plugin-type: script
+    script-interpreter: /usr/bin/python
+    script-file: plugin.py
+    script-args:
+    config:
+      - name: Repository URL
+        title: repository-url
+        type: String
+        required: true
+        description: The URL of the Git repository
+      - name: Checkout reference
+        title: checkout-reference
+        type: String
+        required: true
+        default: master
+        description: Git reference that is passed to 'git checkout'. Defaults to 'master'
+      - name: Directory name
+        title: directory-name
+        type: String
+        required: true
+        description: Name of the clone directory
+      - name: Exclude git-directory
+        title: exclude-git-directory
+        type: Boolean
+        required: false
+        default: false
+        description: Remove .git directory
