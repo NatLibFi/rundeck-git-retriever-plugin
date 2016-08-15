@@ -30,9 +30,3 @@ providers:
         type: String
         required: true
         description: Name of the clone directory
-      - name: Exclude git-directory
-        title: exclude-git-directory
-        type: Boolean
-        required: false
-        default: false
-        description: Remove .git directory

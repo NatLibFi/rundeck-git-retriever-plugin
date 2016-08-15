@@ -25,7 +25,7 @@ def checkForErrors(child):
     print(child.stderr.read())
     return child
 
-base_directory = os.path.join(os.getenv('RD_PLUGIN_TMPDIR'), os.getenv('RD_RUNDECK_PROJECT'), os.getenv('RD_JOB_NAME'), 'git-retriever')
+base_directory = os.path.join(os.getenv('RD_PLUGIN_TMPDIR'), os.getenv('RD_JOB_PROJECT'), os.getenv('RD_JOB_NAME'), 'git-retriever')
 clone_directory = os.path.join(base_directory, os.getenv('RD_CONFIG_CHECKOUT_REFERENCE'))
 target_directory = os.path.join(base_directory, os.getenv('RD_JOB_EXECID'))
 symlink_path = os.path.join(target_directory, os.getenv('RD_CONFIG_DIRECTORY_NAME'))
@@ -42,9 +42,6 @@ if not os.path.exists(clone_directory):
   child = subprocess.Popen(['git', 'checkout', os.getenv('RD_CONFIG_CHECKOUT_REFERENCE')], stderr=subprocess.PIPE)
   child.wait()
   checkForErrors(child)
-
-  if os.getenv('RD_CONFIG_EXCLUDE_GIT_DIRECTORY'):
-    shutil.rmtree(os.path.join(clone_directory, '.git'))
 
   os.chdir('..')
 else:
