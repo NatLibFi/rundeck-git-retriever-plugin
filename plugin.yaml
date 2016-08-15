@@ -14,19 +14,19 @@ providers:
     script-file: plugin.py
     script-args:
     config:
-      - name: Repository URL
-        title: repository-url
+      - name: repository-url
+        title: Repository URL
         type: String
         required: true
         description: The URL of the Git repository
-      - name: Checkout reference
-        title: checkout-reference
+      - name: checkout-reference
+        title: Checkout reference
         type: String
         required: true
         default: master
         description: Git reference that is passed to 'git checkout'. Defaults to 'master'
-      - name: Target directory path
-        title: target-directory
+      - name: target-directory
+        title: Target directory path
         type: String
         required: true
         description: Path of the target directory which will be a symlink to the checked-out source code
