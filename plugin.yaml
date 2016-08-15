@@ -25,8 +25,8 @@ providers:
         required: true
         default: master
         description: Git reference that is passed to 'git checkout'. Defaults to 'master'
-      - name: Directory name
-        title: directory-name
+      - name: Target directory path
+        title: target-directory
         type: String
         required: true
-        description: Name of the clone directory
+        description: Path of the target directory which will be a symlink to the checked-out source code

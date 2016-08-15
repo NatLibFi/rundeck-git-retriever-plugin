@@ -26,11 +26,11 @@ def checkForErrors(child):
     return child
 
 base_directory = os.path.join(os.getenv('RD_PLUGIN_TMPDIR'), os.getenv('RD_JOB_PROJECT'), os.getenv('RD_JOB_NAME'), 'git-retriever')
-clone_directory = os.path.join(base_directory, os.getenv('RD_CONFIG_CHECKOUT_REFERENCE'))
-target_directory = os.path.join(base_directory, os.getenv('RD_JOB_EXECID'))
-symlink_path = os.path.join(target_directory, os.getenv('RD_CONFIG_DIRECTORY_NAME'))
+clone_base_directory = os.path.join(base_directory, os.getenv('RD_CONFIG_REPOSITORY_URL').split('/')[-1]) 
+clone_directory = os.path.join(clone_base_directory, os.getenv('RD_CONFIG_CHECKOUT_REFERENCE'))
 
-os.makedirs(target_directory)
+if not os.path.exists(clone_base_directory):
+  os.makedirs(clone_directory)
 
 if not os.path.exists(clone_directory):
   child = subprocess.Popen(['git', 'clone', os.getenv('RD_CONFIG_REPOSITORY_URL'), clone_directory], stderr=subprocess.PIPE)
@@ -43,15 +43,14 @@ if not os.path.exists(clone_directory):
   child.wait()
   checkForErrors(child)
 
-  os.chdir('..')
 else:
   os.chdir(clone_directory)
+
+  print('Repository already cloned. Pulling changes...')
 
   child = subprocess.Popen(['git', 'pull'], stderr=subprocess.PIPE)
   child.wait()
   checkForErrors(child)
 
-  os.chdir('..')
-
-print('Creating symlink ' + symlink_path + ' -> ' + clone_directory)
-os.symlink(clone_directory, symlink_path)
+print('Creating symlink ' + os.getenv('RD_CONFIG_TARGET_DIRECTORY') + ' -> ' + clone_directory)
+os.symlink(clone_directory, os.getenv('RD_CONFIG_TARGET_DIRECTORY'))
