@@ -25,12 +25,11 @@ def checkForErrors(child):
     print(child.stderr.read())
     return child
 
-base_directory = os.path.join(os.getenv('RD_PLUGIN_TMPDIR'), os.getenv('RD_JOB_PROJECT'), os.getenv('RD_JOB_NAME'), 'git-retriever')
-clone_base_directory = os.path.join(base_directory, os.getenv('RD_CONFIG_REPOSITORY_URL').split('/')[-1]) 
-clone_directory = os.path.join(clone_base_directory, os.getenv('RD_CONFIG_CHECKOUT_REFERENCE'))
+base_directory = os.path.join(os.getenv('RD_PLUGIN_TMPDIR'), os.getenv('RD_JOB_PROJECT'), os.getenv('RD_JOB_NAME'), 'git-retriever', os.getenv('RD_CONFIG_REPOSITORY_URL').split('/')[-1])
+clone_directory = os.path.join(base_directory, os.getenv('RD_CONFIG_CHECKOUT_REFERENCE'))
 
-if not os.path.exists(clone_base_directory):
-  os.makedirs(clone_directory)
+if not os.path.exists(base_directory):
+  os.makedirs(base_directory)
 
 if not os.path.exists(clone_directory):
   child = subprocess.Popen(['git', 'clone', os.getenv('RD_CONFIG_REPOSITORY_URL'), clone_directory], stderr=subprocess.PIPE)
