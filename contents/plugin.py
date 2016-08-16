@@ -33,24 +33,36 @@ if not os.path.exists(base_directory):
   os.makedirs(base_directory)
 
 if not os.path.exists(clone_directory):
-  child = subprocess.Popen(['git', 'clone', os.getenv('RD_CONFIG_REPOSITORY_URL'), clone_directory], stderr=subprocess.PIPE)
+  child = subprocess.Popen(['git', 'clone', os.getenv('RD_CONFIG_REPOSITORY_URL'), clone_directory], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
   child.wait()
   checkForErrors(child)
 
   os.chdir(clone_directory)
 
-  child = subprocess.Popen(['git', 'checkout', os.getenv('RD_CONFIG_CHECKOUT_REFERENCE')], stderr=subprocess.PIPE)
+  child = subprocess.Popen(['git', 'checkout', os.getenv('RD_CONFIG_CHECKOUT_REFERENCE')], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
   child.wait()
   checkForErrors(child)
 
 else:
+
+  print('Repository already cloned')
+
   os.chdir(clone_directory)
 
-  print('Repository already cloned. Pulling changes...')
-
-  child = subprocess.Popen(['git', 'pull'], stderr=subprocess.PIPE)
+  child = subprocess.Popen(['git', 'status', '-sb'], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
   child.wait()
-  checkForErrors(child)
+
+  if child.stdout.read().find('(no branch)') < 0:
+
+    checkForErrors(child)
+
+    print('Pulling changes...')
+
+    child = subprocess.Popen(['git', 'pull'], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+    child.wait()
+    checkForErrors(child)
+  else:
+    checkForErrors(child)
 
 if not os.path.exists(symlink_parent_directory):
   os.makedirs(symlink_parent_directory)
