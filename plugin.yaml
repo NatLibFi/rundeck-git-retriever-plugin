@@ -25,6 +25,11 @@ providers:
         required: true
         default: master
         description: Git reference that is passed to 'git checkout'. Defaults to 'master'
+      - name: allowed-branch
+        title: Allowed branch
+        type: String
+        required: false
+        description: Only allow commits that exist in this branch
       - name: target-directory
         title: Target directory path
         type: String

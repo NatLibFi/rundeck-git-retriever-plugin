@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-import os, sys, subprocess, shutil
+import os, sys, re, subprocess, shutil
 
 def checkForErrors(child):
   if child.returncode:
@@ -66,6 +66,16 @@ else:
 
 if not os.path.exists(symlink_parent_directory):
   os.makedirs(symlink_parent_directory)
+
+if os.getenv('RD_CONFIG_ALLOWED_BRANCH'):
+
+  child = subprocess.Popen(['git', 'branch', '-r', '--contains', os.getenv('RD_CONFIG_CHECKOUT_REFERENCE')], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+  child.wait()
+  checkForErrors(child)
+
+  if not re.search('\s+origin/' + os.getenv('RD_CONFIG_ALLOWED_BRANCH') + '$', child.stdout.read()):
+    print("Allowed branch '" + os.getenv('RD_CONFIG_ALLOWED_BRANCH') + "' does not contain reference '" + os.getenv('RD_CONFIG_CHECKOUT_REFERENCE') + ". Aborting.")
+    sys.exit(1);
 
 print('Creating symlink ' + os.getenv('RD_CONFIG_TARGET_DIRECTORY') + ' -> ' + clone_directory)
 os.symlink(clone_directory, os.getenv('RD_CONFIG_TARGET_DIRECTORY'))
