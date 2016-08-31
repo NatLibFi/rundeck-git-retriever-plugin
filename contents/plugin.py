@@ -73,7 +73,7 @@ if os.getenv('RD_CONFIG_ALLOWED_BRANCH'):
   child.wait()
   checkForErrors(child)
 
-  if not re.search('\s+origin/' + os.getenv('RD_CONFIG_ALLOWED_BRANCH') + '$', child.stdout.read()):
+  if not re.search('[\s+|/]origin/' + os.getenv('RD_CONFIG_ALLOWED_BRANCH') + '$', child.stdout.read(), re.MULTILINE):
     print("Allowed branch '" + os.getenv('RD_CONFIG_ALLOWED_BRANCH') + "' does not contain reference '" + os.getenv('RD_CONFIG_CHECKOUT_REFERENCE') + ". Aborting.")
     sys.exit(1);
 
