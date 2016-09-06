@@ -27,7 +27,9 @@ def checkForErrors(child):
 
 base_directory = os.path.join(os.getenv('RD_PLUGIN_TMPDIR'), os.getenv('RD_JOB_PROJECT'), os.getenv('RD_JOB_NAME'), 'git-retriever', os.getenv('RD_CONFIG_REPOSITORY_URL').split('/')[-1])
 clone_directory = os.path.join(base_directory, os.getenv('RD_CONFIG_CHECKOUT_REFERENCE'))
-symlink_parent_directory = os.path.dirname(os.getenv('RD_CONFIG_TARGET_DIRECTORY'))
+target_directory = os.getenv('RD_CONFIG_TARGET_DIRECTORY')
+target_parent_directory = os.path.dirname(target_directory)
+
 
 if not os.path.exists(base_directory):
   os.makedirs(base_directory)
@@ -64,8 +66,8 @@ else:
   else:
     checkForErrors(child)
 
-if not os.path.exists(symlink_parent_directory):
-  os.makedirs(symlink_parent_directory)
+if not os.path.exists(target_parent_directory):
+  os.makedirs(target_parent_directory)
 
 if os.getenv('RD_CONFIG_ALLOWED_BRANCH'):
 
@@ -77,5 +79,5 @@ if os.getenv('RD_CONFIG_ALLOWED_BRANCH'):
     print("Allowed branch '" + os.getenv('RD_CONFIG_ALLOWED_BRANCH') + "' does not contain reference '" + os.getenv('RD_CONFIG_CHECKOUT_REFERENCE') + ". Aborting.")
     sys.exit(1);
 
-print('Creating symlink ' + os.getenv('RD_CONFIG_TARGET_DIRECTORY') + ' -> ' + clone_directory)
-os.symlink(clone_directory, os.getenv('RD_CONFIG_TARGET_DIRECTORY'))
+print('Copying files to ' + target_directory)
+shutil.copytree(clone_directory, target_directory, ignore=shutil.ignore_patterns('*.git'))

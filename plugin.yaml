@@ -1,7 +1,7 @@
 # yaml plugin metadata
 
 name: Git repository retriever
-version: 1.0.0
+version: 2.0.0
 rundeckPluginVersion: 1.1
 author: The National Library of Finland
 date: 2016-08-14
@@ -34,4 +34,4 @@ providers:
         title: Target directory path
         type: String
         required: true
-        description: Path of the target directory which will be a symlink to the checked-out source code
+        description: Path of the target directory where the checked-out source code will be copied to
