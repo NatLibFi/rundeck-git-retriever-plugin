@@ -29,19 +29,27 @@ base_directory = os.path.join(os.getenv('RD_PLUGIN_TMPDIR'), os.getenv('RD_JOB_P
 clone_directory = os.path.join(base_directory, os.getenv('RD_CONFIG_CHECKOUT_REFERENCE'))
 target_directory = os.getenv('RD_CONFIG_TARGET_DIRECTORY')
 target_parent_directory = os.path.dirname(target_directory)
+git_env = None
 
+if os.getenv('RD_CONFIG_DISABLE_HOSTKEY_VERIFICATION'):
+
+  os.chmod(os.path.join(os.getenv('RD_PLUGIN_BASE'), 'ssh-disable-hostkey.sh'), stat.S_IREAD | stat.S_IEXEC)
+
+  git_env = {
+    'GIT_SSH': os.path.join(os.getenv('RD_PLUGIN_BASE'), 'ssh-disable-hostkey.sh')
+  }
 
 if not os.path.exists(base_directory):
   os.makedirs(base_directory)
 
 if not os.path.exists(clone_directory):
-  child = subprocess.Popen(['git', 'clone', os.getenv('RD_CONFIG_REPOSITORY_URL'), clone_directory], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+  child = subprocess.Popen(['git', 'clone', os.getenv('RD_CONFIG_REPOSITORY_URL'), clone_directory], stderr=subprocess.PIPE, stdout=subprocess.PIPE, env=git_env)
   child.wait()
   checkForErrors(child)
 
   os.chdir(clone_directory)
 
-  child = subprocess.Popen(['git', 'checkout', os.getenv('RD_CONFIG_CHECKOUT_REFERENCE')], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+  child = subprocess.Popen(['git', 'checkout', os.getenv('RD_CONFIG_CHECKOUT_REFERENCE')], stderr=subprocess.PIPE, stdout=subprocess.PIPE, env=git_env)
   child.wait()
   checkForErrors(child)
 
@@ -51,7 +59,7 @@ else:
 
   os.chdir(clone_directory)
 
-  child = subprocess.Popen(['git', 'status', '-sb'], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+  child = subprocess.Popen(['git', 'status', '-sb'], stderr=subprocess.PIPE, stdout=subprocess.PIPE, env=git_env)
   child.wait()
 
   if child.stdout.read().find('(no branch)') < 0:
@@ -60,7 +68,7 @@ else:
 
     print('Pulling changes...')
 
-    child = subprocess.Popen(['git', 'pull'], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+    child = subprocess.Popen(['git', 'pull'], stderr=subprocess.PIPE, stdout=subprocess.PIPE, env=git_env)
     child.wait()
     checkForErrors(child)
   else:
@@ -71,7 +79,7 @@ if not os.path.exists(target_parent_directory):
 
 if os.getenv('RD_CONFIG_ALLOWED_BRANCH'):
 
-  child = subprocess.Popen(['git', 'branch', '-r', '--contains', os.getenv('RD_CONFIG_CHECKOUT_REFERENCE')], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+  child = subprocess.Popen(['git', 'branch', '-r', '--contains', os.getenv('RD_CONFIG_CHECKOUT_REFERENCE')], stderr=subprocess.PIPE, stdout=subprocess.PIPE, env=git_env)
   child.wait()
   checkForErrors(child)
 
