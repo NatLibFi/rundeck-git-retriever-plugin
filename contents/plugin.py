@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-import os, sys, re, subprocess, shutil
+import os, sys, stat, re, subprocess, shutil
 
 def checkForErrors(child):
   if child.returncode:
