@@ -1,10 +1,10 @@
 # yaml plugin metadata
 
 name: Git repository retriever
-version: 2.1.0
+version: 2.2.0
 rundeckPluginVersion: 1.1
 author: The National Library of Finland
-date: 2016-08-14
+date: 2016-10-17
 providers:
   - name: Git repository retriever
     description: Retrieve a Git repository via SSH
@@ -35,6 +35,10 @@ providers:
         type: String
         required: true
         description: Path of the target directory where the checked-out source code will be copied to
+      - name: exclude-git-directory
+        title: Exclude git directory when copying files
+        type: Boolean
+        default: true
       - name: disable-hostkey-verification
         title: Disable host key verification
         type: Boolean
