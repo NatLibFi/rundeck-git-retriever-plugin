@@ -1,7 +1,7 @@
 # yaml plugin metadata
 
 name: Git repository retriever
-version: 2.2.0
+version: 2.2.1
 rundeckPluginVersion: 1.1
 author: The National Library of Finland
 date: 2016-10-17
