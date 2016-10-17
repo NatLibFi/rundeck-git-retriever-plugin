@@ -31,7 +31,7 @@ target_directory = os.getenv('RD_CONFIG_TARGET_DIRECTORY')
 target_parent_directory = os.path.dirname(target_directory)
 git_env = None
 
-if os.getenv('RD_CONFIG_DISABLE_HOSTKEY_VERIFICATION') is True:
+if os.getenv('RD_CONFIG_DISABLE_HOSTKEY_VERIFICATION') == 'true':
 
   os.chmod(os.path.join(os.getenv('RD_PLUGIN_BASE'), 'ssh-disable-hostkey.sh'), stat.S_IREAD | stat.S_IEXEC)
 
@@ -88,4 +88,4 @@ if os.getenv('RD_CONFIG_ALLOWED_BRANCH'):
     sys.exit(1);
 
 print('Copying files to ' + target_directory)
-shutil.copytree(clone_directory, target_directory, ignore=shutil.ignore_patterns('*.git' if os.getenv('RD_CONFIG_EXCLUDE_GIT_DIRECTORY') is True else ''))
+shutil.copytree(clone_directory, target_directory, ignore=shutil.ignore_patterns('*.git' if os.getenv('RD_CONFIG_EXCLUDE_GIT_DIRECTORY') == 'true' else ''))
