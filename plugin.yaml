@@ -1,7 +1,7 @@
 # yaml plugin metadata
 
 name: Git repository retriever
-version: 2.2.1
+version: 2.3.0
 rundeckPluginVersion: 1.1
 author: The National Library of Finland
 date: 2016-10-17
@@ -41,5 +41,9 @@ providers:
         default: true
       - name: disable-hostkey-verification
         title: Disable host key verification
+        type: Boolean
+        default: false
+      - name: enable-git-submodules
+        title: Enable Git submodules
         type: Boolean
         default: false

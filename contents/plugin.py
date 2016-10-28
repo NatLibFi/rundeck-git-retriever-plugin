@@ -53,6 +53,14 @@ if not os.path.exists(clone_directory):
   child.wait()
   checkForErrors(child)
 
+  child = subprocess.Popen(['git', 'submodule', 'init'], stderr=subprocess.PIPE, stdout=subprocess.PIPE, env=git_env)
+  child.wait()
+  checkForErrors(child)
+
+  child = subprocess.Popen(['git', 'submodule', 'update'], stderr=subprocess.PIPE, stdout=subprocess.PIPE, env=git_env)
+  child.wait()
+  checkForErrors(child)
+
 else:
 
   print('Repository already cloned')
@@ -71,6 +79,11 @@ else:
     child = subprocess.Popen(['git', 'pull'], stderr=subprocess.PIPE, stdout=subprocess.PIPE, env=git_env)
     child.wait()
     checkForErrors(child)
+
+    child = subprocess.Popen(['git', 'submodule', 'update'], stderr=subprocess.PIPE, stdout=subprocess.PIPE, env=git_env)
+    child.wait()
+    checkForErrors(child)
+
   else:
     checkForErrors(child)
 
